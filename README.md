@@ -1,1 +1,1 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/k0pch4/LarsLasso/master?filepath=index.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://k0pch4.github.io/LarsLasso/lars_lassov2)
