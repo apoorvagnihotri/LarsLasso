@@ -4,3 +4,4 @@ nbinteract
 scikit-learn
 scipy
 matplotlib
+pandas
