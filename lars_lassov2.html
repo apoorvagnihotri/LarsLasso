@@ -13270,8 +13270,8 @@ div#notebook {
   </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Lars-Lasso">Lars Lasso<a class="anchor-link" href="#Lars-Lasso">&#182;</a></h1><p>Feature selection is used often to compe up with better models with lower computations and better accuracy. Feature selection methods like Forward Selection and Backward Section look into each of the features and try to add or delete features that is considers important and less improtant respectively. <code>Least-angle regression (LARS)</code>, a new model selection algorithm, is a different version of traditional forward selection methods. <code>Least-angle regression (LARS)</code> come handy when dealing with high-dimensional data as it takes into consideration <code>LASSO (least absolute shrinkage and selection operator)</code> is a regression method that performs both variable selection and regularization in order to enhance the prediction accuracy. In <code>LARS LASSO</code> we do the feature selection using the <code>LARS</code> method. The algorithm is similar to forward stepwise regression, but instead of including variables at each step, the estimated parameters are increased in a direction equiangular to each one's correlations with the residual. This process is iterated until we run out of all the features.</p>
-<p>It is not only similar to forward section but as well as backward selection.</p>
+<h1 id="Lars-Lasso">Lars Lasso<a class="anchor-link" href="#Lars-Lasso">&#182;</a></h1><p>Feature selection is often used to come up with better models with lower computations and better accuracy. Feature selection methods like Forward Selection and Backward Section look into each of the features and try to add or delete features that are considered essential and less critical respectively. It comes in handy when dealing with high-dimensional data as it takes into consideration the correlation of features with the residual to select the active features. The <code>LARS</code> algorithm is similar to forward stepwise regression, but instead of including variables at each step, the estimated parameters are increased in a direction equiangular to each one's correlations with the residual. This process is iterated until we run out of all the features.</p>
+<p><code>LARS LASSO (least absolute shrinkage and selection operator)</code> is a regression method that performs both variable selection and regularization to reduce the model complexity for better generalizability. The <code>LASSO</code> modification to the <code>LARS</code> algorithm eliminates a particular feature from the active set when the corresponding coefficient nears zero. Thus <code>LARS LASSO</code> is a combination of forward and backward feature selection methods.</p>
 <h4 id="Abhvya-Chandra-|-Apoorv-Agnihotri-|-Jatin-Dholakia-|-Sagar-Gupta">Abhvya Chandra | Apoorv Agnihotri | Jatin Dholakia | Sagar Gupta<a class="anchor-link" href="#Abhvya-Chandra-|-Apoorv-Agnihotri-|-Jatin-Dholakia-|-Sagar-Gupta">&#182;</a></h4>
 </div>
 </div>
@@ -13327,16 +13327,66 @@ div#notebook {
 
   
 
-  <div class="
+  <div class="nbinteract-hide_in
       cell border-box-sizing code_cell rendered">
     <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#nbi:hide_in</span>
+<span class="c1"># https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lars.html</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="k">def</span> <span class="nf">lars_path</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+    <span class="n">diabetes</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">()</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">target</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">coefs</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">lars_path</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lasso&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">max_iter</span><span class="o">=</span><span class="n">iterations</span><span class="p">)</span>
+
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">xx</span> <span class="o">/=</span> <span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">coefs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;|coef| / max|coef|&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coefficients&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LASSO Path&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+<span class="n">widget</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">lars_path</span><span class="p">,</span>
+                     <span class="n">iterations</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">widget</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    
+
+
+
+  <div class="output_subarea output_widget_view ">
+    <button class="js-nbinteract-widget">
+      Loading widgets...
+    </button>
+  </div>
+
+</div>
+
 </div>
 </div>
 
